@@ -65,7 +65,7 @@ public:
 
     Q sf = moon::secondsSinceFullMoon(toTerrestrial());
 
-    if (sf < 8.l * 3600.l) {
+    if (sf < 4.l * 3600.l) {
       ls -= 8.l * 3600.l - sf * 2.l;
     }
 
