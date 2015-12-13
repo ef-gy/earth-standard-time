@@ -33,23 +33,19 @@
 #include <est/moon.h>
 
 namespace est {
-template<class Q = long double, class clock = std::chrono::system_clock>
+template <class Q = long double, class clock = std::chrono::system_clock>
 class time : public base<Q, clock> {
 public:
   constexpr time(const Q &pValue) : base<Q, clock>(pValue) {}
   constexpr time(const base<Q, clock> &pValue) : base<Q, clock>(pValue) {}
 
-  Q second(void) const {
-    return std::floor(std::fmod(getDayPortion(), 60.l));
-  }
+  Q second(void) const { return std::floor(std::fmod(getDayPortion(), 60.l)); }
 
   Q minute(void) const {
     return std::floor(std::fmod(getDayPortion() / 60.l, 60.l));
   }
 
-  Q hour(void) const {
-    return std::floor(getDayPortion() / 3600.l);
-  }
+  Q hour(void) const { return std::floor(getDayPortion() / 3600.l); }
 
   Q day(void) const {
     return 1.l + std::floor(std::fmod(getDatePortion(), 30.l));
@@ -64,8 +60,16 @@ public:
   }
 
   Q leapSeconds(void) const {
-    return fullMoonsSinceEpoch() * 8.l * 3600.l
-         + solarQuartersSinceEpoch() * 43 * 60.l;
+    Q ls = fullMoonsSinceEpoch() * 8.l * 3600.l +
+           solarQuartersSinceEpoch() * 43 * 60.l;
+
+    Q sf = moon::secondsSinceFullMoon(toTerrestrial());
+
+    if (sf < 8.l * 3600.l) {
+      ls -= 8.l * 3600.l - sf * 2.l;
+    }
+
+    return ls;
   }
 
   using base<Q, clock>::toTerrestrial;
@@ -88,9 +92,7 @@ protected:
     return -time(epoch()).solarQuarters() + solarQuarters();
   }
 
-  Q secondsWithoutLeapSeconds(void) const {
-    return value - leapSeconds();
-  }
+  Q secondsWithoutLeapSeconds(void) const { return value - leapSeconds(); }
 
   Q getDatePortion(void) const {
     return std::floor(secondsWithoutLeapSeconds() / (1444.l * 60.l));

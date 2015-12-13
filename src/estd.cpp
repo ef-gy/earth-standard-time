@@ -45,7 +45,7 @@ static httpd::servlet<asio::local::stream_protocol>
 
 template <class transport>
 static bool EST(typename net::http::server<transport>::session &session,
-                 std::smatch &m) {
+                std::smatch &m) {
   std::ostringstream os("");
 
   est::time<> t = est::time<>::now();
@@ -54,15 +54,9 @@ static bool EST(typename net::http::server<transport>::session &session,
     t = est::time<>::fromUNIX(std::stold(m[2]));
   }
 
-  os << t.year() << "-" << t.month() << "-" << t.day() << " "
-     << t.hour() << ":" << t.minute() << ":" << t.second()
-//     << "\n"
-//     << t.leapSeconds()
-//     << "\n"
-//     << t.fullMoonsSinceEpoch()
-//     << "\n"
-//     << t.solarQuartersSinceEpoch()
-     ;
+  os << t.year() << "-" << t.month() << "-" << t.day() << " " << t.hour() << ":"
+     << t.minute() << ":" << t.second() /* << "\n" << t.leapSeconds() << "\n"
+     << t.fullMoonsSinceEpoch() << "\n" << t.solarQuartersSinceEpoch() */;
 
   session.reply(200, os.str());
 

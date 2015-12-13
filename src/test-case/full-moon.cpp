@@ -48,8 +48,10 @@ int testFullMoon(std::ostream &log) {
     maxDeviation = std::max(maxDeviation, std::abs(dev));
   }
 
-  log << "minimum deviation (fullMoon(terrestrialFullMoon)): " << minDeviation << "\n";
-  log << "maximum deviation (fullMoon(terrestrialFullMoon)): " << maxDeviation << "\n";
+  log << "minimum deviation (fullMoon(terrestrialFullMoon)): " << minDeviation
+      << "\n";
+  log << "maximum deviation (fullMoon(terrestrialFullMoon)): " << maxDeviation
+      << "\n";
 
   return maxDeviation > 0.0001;
 }
