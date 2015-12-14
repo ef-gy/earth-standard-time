@@ -55,8 +55,9 @@ static bool EST(typename net::http::server<transport>::session &session,
   }
 
   os << t.year() << "-" << t.month() << "-" << t.day() << " " << t.hour() << ":"
-     << t.minute() << ":" << t.second() /* << "\n" << t.leapSeconds() << "\n"
-     << t.fullMoonsSinceEpoch() << "\n" << t.solarQuartersSinceEpoch() */;
+     << t.minute() << ":" << t.second();
+  //  os << "\n" << t.leapSeconds() << "\n"
+  //     << t.fullMoonsSinceEpoch() << "\n" << t.solarQuartersSinceEpoch();
 
   session.reply(200, os.str());
 

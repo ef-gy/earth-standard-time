@@ -60,13 +60,19 @@ public:
   }
 
   Q leapSeconds(void) const {
-    Q ls = fullMoonsSinceEpoch() * 8.l * 3600.l +
-           solarQuartersSinceEpoch() * 43 * 60.l;
+    Q ls = lunarLeapSeconds() + solarQuartersSinceEpoch() * 43.l * 60.l;
 
-    Q sf = moon::secondsSinceFullMoon(toTerrestrial());
+    const Q os = orbit::secondsSinceLastQuarter(toTerrestrial());
 
-    if (sf < 4.l * 3600.l) {
-      ls -= 8.l * 3600.l - sf * 2.l;
+    if (os < 3.l * 3600.l) {
+      ls -= 43.l * 60.l;
+
+      Q p = std::fmod(value - ls, 60.l * 1444.l),
+        h1 = std::floor((p - os) / 3600.l), h2 = std::fmod((p - os), 3600.l),
+        nextFullHour = h1 > 23.l ? 4.l * 60.l - h2 : 3600.l - h2,
+        s = os - nextFullHour, m = std::floor(s / 60.l);
+
+      ls += nonPrimeLeapMinutes(m) * 60.l;
     }
 
     return ls;
@@ -90,6 +96,56 @@ protected:
 
   Q solarQuartersSinceEpoch(void) const {
     return -time(epoch()).solarQuarters() + solarQuarters();
+  }
+
+  Q lunarLeapSeconds(void) const {
+    Q ls = fullMoonsSinceEpoch() * 8.l * 3600.l;
+
+    const Q sf = moon::secondsSinceFullMoon(toTerrestrial());
+
+    if (sf < 4.l * 3600.l) {
+      ls -= 8.l * 3600.l - sf * 2.l;
+    }
+
+    return ls;
+  }
+
+  static bool isPrime(long m) {
+    if (m <= 1) {
+      return false;
+    }
+
+    for (long i = 2; i <= std::sqrt(m); i++) {
+      if ((m % i) == 0) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  static Q nonPrimeLeapMinutes(long m) {
+    if (m < 0) {
+      return 0;
+    }
+
+    if (m > (60 + 43)) {
+      return 43;
+    }
+
+    long l = 0;
+    bool jd = false;
+
+    for (long i = 0; i < m; i++) {
+      if (!jd && !isPrime(i - l)) {
+        l++;
+        jd = true;
+      } else {
+        jd = false;
+      }
+    }
+
+    return l;
   }
 
   Q secondsWithoutLeapSeconds(void) const { return value - leapSeconds(); }
