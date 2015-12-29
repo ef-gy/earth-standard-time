@@ -38,10 +38,10 @@
 
 using namespace efgy;
 
-static httpd::servlet<asio::ip::tcp> TCPQuit("^/quit$",
+static httpd::servlet<asio::ip::tcp> TCPQuit("/quit",
                                              httpd::quit<asio::ip::tcp>);
 static httpd::servlet<asio::local::stream_protocol>
-    unixQuit("^/quit$", httpd::quit<asio::local::stream_protocol>);
+    unixQuit("/quit", httpd::quit<asio::local::stream_protocol>);
 
 template <class transport>
 static bool EST(typename net::http::server<transport>::session &session,
@@ -64,7 +64,9 @@ static bool EST(typename net::http::server<transport>::session &session,
   return true;
 }
 
-static httpd::servlet<asio::ip::tcp> TCPEST("^/est/(unix/(-?[0-9]+))?$",
+static httpd::servlet<asio::ip::tcp> TCPEST("/est/(unix/(-?[0-9]+))?",
                                             EST<asio::ip::tcp>);
+static httpd::servlet<asio::local::stream_protocol>
+    UNIXEST("/est/(unix/(-?[0-9]+))?", EST<asio::local::stream_protocol>);
 
 int main(int argc, char *argv[]) { return io::main(argc, argv); }
