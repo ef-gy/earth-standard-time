@@ -38,8 +38,6 @@
 
 using namespace efgy;
 
-static httpd::servlet<asio::ip::tcp> TCPQuit("/quit",
-                                             httpd::quit<asio::ip::tcp>);
 static httpd::servlet<asio::local::stream_protocol>
     unixQuit("/quit", httpd::quit<asio::local::stream_protocol>);
 
