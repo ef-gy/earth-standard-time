@@ -30,7 +30,7 @@ static constexpr long double terrestrialFullMoon(long double month) {
           lunationCoFactor * month * month);
 }
 
-static constexpr std::array<long double, 2> fullMoons(long double seconds) {
+static std::array<long double, 2> fullMoons(long double seconds) {
   return {(-std::sqrt(-4.l * fullMoonOffset * lunationCoFactor +
                       lunation * lunation + 4.l * lunationCoFactor * seconds) -
            lunation) /

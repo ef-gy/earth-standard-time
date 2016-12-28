@@ -1,7 +1,4 @@
 *.tag
-include/ef.gy
-include/asio*
-.third-party
 dependencies.mk
 estd
 test-case-*
