@@ -18,8 +18,10 @@
 #define ASIO_DISABLE_THREADS
 #include <cxxhttp/httpd.h>
 #include <est/time.h>
+#include <ef.gy/render-json.h>
 
 using namespace cxxhttp;
+using namespace efgy;
 
 static httpd::servlet<asio::local::stream_protocol>
     unixQuit("/quit", httpd::quit<asio::local::stream_protocol>);
@@ -35,10 +37,25 @@ static bool EST(typename net::http::server<transport>::session &session,
     t = est::time<>::fromUNIX(std::stold(m[2]));
   }
 
-  os << t.year() << "-" << t.month() << "-" << t.day() << " " << t.hour() << ":"
-     << t.minute() << ":" << t.second();
-  //  os << "\n" << t.leapSeconds() << "\n"
-  //     << t.fullMoonsSinceEpoch() << "\n" << t.solarQuartersSinceEpoch();
+  bool useJSON = (m[3] == ".json");
+
+  if (useJSON) {
+    json::value<> v;
+    v.toObject();
+
+    v("year") = t.year();
+    v("month") = t.month();
+    v("day") = t.day();
+
+    v("hour") = t.hour();
+    v("minute") = t.minute();
+    v("second") = t.second();
+
+    os << json::tag() << v;
+  } else {
+    os << t.year() << "-" << t.month() << "-" << t.day() << " " << t.hour()
+       << ":" << t.minute() << ":" << t.second();
+  }
 
   session.reply(200, os.str());
 
