@@ -61,6 +61,10 @@ public:
     return ls;
   }
 
+  bool isMonthNamed(void) const {
+    return month() != 4 || std::fmod(year(), 2) == 0;
+  }
+
   using base<Q, clock>::toTerrestrial;
   using base<Q, clock>::epoch;
 

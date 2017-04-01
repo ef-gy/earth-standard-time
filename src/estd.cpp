@@ -51,6 +51,8 @@ static bool EST(typename net::http::server<transport>::session &session,
     v("minute") = t.minute();
     v("second") = t.second();
 
+    v("is-month-named") = t.isMonthNamed();
+
     os << json::tag() << v;
   } else {
     os << t.year() << "-" << t.month() << "-" << t.day() << " " << t.hour()
