@@ -16,10 +16,10 @@
  */
 
 #define ASIO_DISABLE_THREADS
-#include <ef.gy/httpd.h>
+#include <cxxhttp/httpd.h>
 #include <est/time.h>
 
-using namespace efgy;
+using namespace cxxhttp;
 
 static httpd::servlet<asio::local::stream_protocol>
     unixQuit("/quit", httpd::quit<asio::local::stream_protocol>);
