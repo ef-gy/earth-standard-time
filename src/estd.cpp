@@ -38,6 +38,7 @@ static bool EST(typename net::http::server<transport>::session &session,
   }
 
   bool useJSON = (m[3] == ".json");
+  std::map<std::string,std::string> head = {};
 
   if (useJSON) {
     json::value<> v;
@@ -54,12 +55,14 @@ static bool EST(typename net::http::server<transport>::session &session,
     v("is-month-named") = t.isMonthNamed();
 
     os << json::tag() << v;
+    head["Content-Type"] = "application/json";
   } else {
     os << t.year() << "-" << t.month() << "-" << t.day() << " " << t.hour()
        << ":" << t.minute() << ":" << t.second();
+    head["Content-Type"] = "text/plain";
   }
 
-  session.reply(200, os.str());
+  session.reply(200, head, os.str());
 
   return true;
 }
