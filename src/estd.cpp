@@ -41,7 +41,7 @@ static bool EST(typename net::http::server<transport>::session &session,
   std::map<std::string,std::string> head = {};
 
   if (useJSON) {
-    json::value<> v;
+    json::json v;
     v.toObject();
 
     v("year") = t.year();
