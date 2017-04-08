@@ -12,8 +12,8 @@
 #if !defined(EST_BASE_H)
 #define EST_BASE_H
 
-#include <cmath>
 #include <chrono>
+#include <cmath>
 
 /**
  * Note: the epoch of this is *probably* 1970-01-01 00:00:00 UTC and it's
@@ -46,14 +46,12 @@ public:
            // leap seconds are not actually in the UNIX base stamp, so we weould
            // not have needed to add those leap seconds since 1970 to the time
            // stamp to get to TAI.
-           -
-           26       // number of leap seconds in Q3 2015
+           - 26     // number of leap seconds in Q3 2015
            + 32.184 // offset between TAI and TT, Q3 2015
            // finally, convert to seconds since January 1st, 2000, which makes
            // it
            // easier plug into our formula for the moon phases.
-           -
-           unixToTerrestrialEpochOffset;
+           - unixToTerrestrialEpochOffset;
   }
 
   constexpr Q toJulian(void) const { return (toUNIX() - 2440587.5l) * 86400.l; }

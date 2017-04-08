@@ -11,8 +11,8 @@
 
 #include <iostream>
 
-#include <ef.gy/test-case.h>
 #include <ef.gy/range.h>
+#include <ef.gy/test-case.h>
 
 #include <est/moon.h>
 

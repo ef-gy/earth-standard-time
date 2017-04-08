@@ -16,10 +16,10 @@
  */
 
 #define ASIO_DISABLE_THREADS
-#include <cxxhttp/httpd.h>
 #include <cxxhttp/httpd-options.h>
-#include <est/time.h>
+#include <cxxhttp/httpd.h>
 #include <ef.gy/render-json.h>
+#include <est/time.h>
 
 using namespace cxxhttp;
 using namespace efgy;
@@ -39,7 +39,7 @@ static bool EST(typename net::http::server<transport>::session &session,
   }
 
   bool useJSON = (m[3] == ".json");
-  std::map<std::string,std::string> head = {};
+  std::map<std::string, std::string> head = {};
 
   if (useJSON) {
     json::json v;
@@ -70,8 +70,7 @@ static bool EST(typename net::http::server<transport>::session &session,
 
 static const char *rx = "/est(/unix/(-?[0-9]+))?(\\.json)?";
 
-static httpd::servlet<asio::ip::tcp> TCPEST(rx,
-                                            EST<asio::ip::tcp>);
+static httpd::servlet<asio::ip::tcp> TCPEST(rx, EST<asio::ip::tcp>);
 static httpd::servlet<asio::local::stream_protocol>
     UNIXEST(rx, EST<asio::local::stream_protocol>);
 

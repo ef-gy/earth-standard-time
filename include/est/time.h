@@ -12,8 +12,8 @@
 #if !defined(EST_TIME_H)
 #define EST_TIME_H
 
-#include <est/orbit.h>
 #include <est/moon.h>
+#include <est/orbit.h>
 
 namespace est {
 template <class Q = long double, class clock = std::chrono::system_clock>
