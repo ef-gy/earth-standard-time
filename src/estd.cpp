@@ -17,16 +17,17 @@
 
 #define ASIO_DISABLE_THREADS
 #include <cxxhttp/httpd.h>
+
+// Optional server features.
 #include <cxxhttp/httpd-options.h>
+#include <cxxhttp/httpd-quit.h>
 #include <cxxhttp/httpd-trace.h>
+
 #include <ef.gy/render-json.h>
 #include <est/time.h>
 
 using namespace cxxhttp;
 using namespace efgy;
-
-static httpd::servlet<asio::local::stream_protocol>
-    unixQuit("/quit", httpd::quit<asio::local::stream_protocol>);
 
 template <class transport>
 static bool EST(typename net::http::server<transport>::session &session,
@@ -40,7 +41,7 @@ static bool EST(typename net::http::server<transport>::session &session,
   }
 
   bool useJSON = (m[3] == ".json");
-  std::map<std::string, std::string> head = {};
+  net::http::headers head = {};
 
   if (useJSON) {
     json::json v;
@@ -71,8 +72,8 @@ static bool EST(typename net::http::server<transport>::session &session,
 
 static const char *rx = "/est(/unix/(-?[0-9]+))?(\\.json)?";
 
-static httpd::servlet<asio::ip::tcp> TCPEST(rx, EST<asio::ip::tcp>);
+static httpd::servlet<asio::ip::tcp> TCP(rx, EST<asio::ip::tcp>);
 static httpd::servlet<asio::local::stream_protocol>
-    UNIXEST(rx, EST<asio::local::stream_protocol>);
+    UNIX(rx, EST<asio::local::stream_protocol>);
 
 int main(int argc, char *argv[]) { return io::main(argc, argv); }
