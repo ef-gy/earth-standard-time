@@ -18,7 +18,7 @@
 #include <est/json.h>
 #include <est/string.h>
 
-#include <ef.gy/render-json.h>
+#include <ef.gy/stream-json.h>
 
 namespace est {
 namespace http {
@@ -35,7 +35,7 @@ EST(typename cxxhttp::net::http::server<transport>::session &session,
   }
 
   bool useJSON = (m[3] == ".json");
-  cxxhttp::net::http::headers head = {};
+  cxxhttp::headers head = {};
 
   if (useJSON) {
     os << efgy::json::tag() << toJSON(t);
